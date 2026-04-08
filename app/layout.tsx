@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { ClerkProvider, Show, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
+import Header from "@/components/Header";
+import Sidebar from "@/components/sidebar/Sidebar";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -11,14 +14,28 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
+                               children,
+                           }: Readonly<{
+    children: React.ReactNode;
 }>) {
-  return (
-    <html
-      lang="en" className={cn("font-sans", geist.variable)}>
-    <body className="">{children}</body>
-    </html>
-  );
+    return (
+        <ClerkProvider>
+            <html
+                lang="en">
+            <body>
+            <Header />
+
+            <div className={'flex min-h-screen'}>
+                <Sidebar />
+
+
+                <div className={'flex-1 p-6 bg-gray-100 overflow-y-auto scrollbar-hide'}>{children}</div>
+            </div>
+
+            </body>
+        </html>
+</ClerkProvider>
+
+)
+
 }
