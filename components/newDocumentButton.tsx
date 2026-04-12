@@ -1,4 +1,5 @@
 'use client';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
@@ -9,9 +10,12 @@ import { FilePlusCorner } from 'lucide-react';
 function NewDocumentButton() {
     const { user } = useUser();
     const router = useRouter();
+    const [isCreating, setIsCreating] = useState(false);
 
     const handleCreateDocument = async () => {
-        if (!user) return;
+        if (!user || isCreating) return;
+
+        setIsCreating(true);
 
         try {
             const collectionRef = collection(db, 'documents');
@@ -23,6 +27,8 @@ function NewDocumentButton() {
             router.push(`/doc/${docRef.id}`);
         } catch (error) {
             console.error('Error creating document:', error);
+        } finally {
+            setIsCreating(false);
         }
     };
 
@@ -30,6 +36,7 @@ function NewDocumentButton() {
         <>
             <Button
                 onClick={handleCreateDocument}
+                disabled={isCreating}
                 className={'md:hidden'}
                 variant="ghost"
                 size="icon"
@@ -37,7 +44,11 @@ function NewDocumentButton() {
             >
                 <FilePlusCorner />
             </Button>
-            <Button onClick={handleCreateDocument} className={'hidden md:flex'}>
+            <Button
+                onClick={handleCreateDocument}
+                disabled={isCreating}
+                className={'hidden md:flex'}
+            >
                 New Document
             </Button>
             <button

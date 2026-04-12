@@ -19,24 +19,24 @@ export default function RootLayout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <ClerkProvider>
-            <html lang="en" suppressHydrationWarning>
-                <body className={geist.variable}>
+        <html lang="en" suppressHydrationWarning>
+            <body className={geist.variable}>
+                <ClerkProvider>
                     <ThemeProvider>
                         <Header />
                         <div className={'flex min-h-screen'}>
                             <Sidebar />
-                            <div
+                            <main
                                 className={
                                     'flex-1 p-6 bg-background overflow-y-auto scrollbar-hide'
                                 }
                             >
                                 {children}
-                            </div>
+                            </main>
                         </div>
                     </ThemeProvider>
-                </body>
-            </html>
-        </ClerkProvider>
+                </ClerkProvider>
+            </body>
+        </html>
     );
 }

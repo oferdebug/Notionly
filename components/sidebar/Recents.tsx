@@ -15,7 +15,10 @@ function Recents() {
 
     const [recents, setRecents] = useState<Document[]>([]);
     useEffect(() => {
-        if (!user?.id) return;
+        if (!user?.id) {
+            setRecents([]);
+            return;
+        }
         const q = query(
             collection(db, 'documents'),
             where('userId', '==', user?.id),
@@ -33,7 +36,7 @@ function Recents() {
     }, [user?.id]);
     return (
         <div className={'w-full'}>
-            {user ? `Recents for ${user.firstName}` : 'Recents'}
+            {user?.firstName ? `Recents for ${user.firstName}` : 'Recents'}
             {recents.map((recent) => (
                 <Link
                     key={recent.id}

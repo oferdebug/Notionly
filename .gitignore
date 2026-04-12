@@ -2,9 +2,7 @@ node_modules/
 .next/
 .env
 .env.local
-.clerk/
-.idea/workspace.xml
-.idea/*.xml
+.idea/
 
 # clerk configuration (can include secrets)
 /.clerk/
