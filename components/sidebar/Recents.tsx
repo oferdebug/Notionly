@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {collection, onSnapshot, query, where} from 'firebase/firestore';
 import {db} from '@/lib/firebase';
 import {useUser} from '@clerk/nextjs';
+import Link from 'next/link'
 
 function Recents() {
     const { user } = useUser();
@@ -31,9 +32,8 @@ function Recents() {
         <div className={'w-full'}>
             { user ? `Recents for ${user.firstName}` : 'Recents'}
             {recents.map((recent) => (
-                <div key={recent.id}>{recent.title}</div>
+                <Link key={recent.id} href={`/doc/${recent.id}`} className="block">{recent.title}</Link>
             ))}
-
         </div>
     );
 }

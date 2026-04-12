@@ -1,11 +1,12 @@
     'use client';
-import {Button} from "@/components/ui/button";
-import {useUser} from "@clerk/nextjs";
-import {useRouter} from "next/navigation";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+    import {Button} from "@/components/ui/button";
+    import {useUser} from "@clerk/nextjs";
+    import {useRouter} from "next/navigation";
+    import {addDoc, collection} from "firebase/firestore";
+    import {db} from "@/lib/firebase";
+    import {FilePlusCorner} from "lucide-react";
 
-function NewDocumentButton() {
+    function NewDocumentButton() {
     const {user} = useUser();
     const router = useRouter();
 
@@ -26,7 +27,17 @@ function NewDocumentButton() {
     };
 
     return (
-        <Button onClick={handleCreateDocument}>New Document</Button>
+        <>
+            <button
+                type="button"
+                className={'md:hidden'}
+                onClick={handleCreateDocument}
+                aria-label="New Document"
+            >
+                <FilePlusCorner />
+            </button>
+            <Button onClick={handleCreateDocument} className={'hidden md:flex'}>New Document</Button>
+        </>
     );
 }
 
