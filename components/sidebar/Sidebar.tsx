@@ -27,6 +27,7 @@ function Sidebar() {
                             className={'p-2 hover:opacity-30 rounded-lg'}
                             size={34}
                         />
+                        <MenuIcon className={'p-2 hover:opacity-30 rounded-lg'} size={34} />
                     </SheetTrigger>
                 </div>
                 <SheetContent side={'left'}>
@@ -52,6 +53,10 @@ function Sidebar() {
                 <NewDocumentButton />
                 <SidebarNav />
                 <Recents />
+            <SidebarHeader />
+            <NewDocumentButton />
+            <SidebarNav />
+            <Recents />
             </div>
         </div>
     );

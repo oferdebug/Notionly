@@ -11,6 +11,8 @@ const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 export const metadata: Metadata = {
     title: 'Notionly',
     description: 'A collaborative document editing platform.',
+    title: "Collaborative Document Editor",
+    description: "A real-time collaborative document editing application",
 };
 
 export default function RootLayout({
