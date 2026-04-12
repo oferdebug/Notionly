@@ -28,7 +28,6 @@ function Recents() {
         });
         return () => unsubscribe();
     }, [user?.id]);
-    console.log(recents);
     return (
         <div className={'w-full'}>
             { user ? `Recents for ${user.firstName}` : 'Recents'}
