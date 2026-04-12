@@ -1,7 +1,6 @@
 'use client'
-import { useUser } from '@clerk/nextjs'
+import {useUser} from '@clerk/nextjs'
 import Image from "next/image";
-import {FilePlus, SquarePen, User} from "lucide-react";
 
 function SidebarHeader() {
     const { user } = useUser()
@@ -17,12 +16,6 @@ function SidebarHeader() {
                         height={40}
                         className='rounded-full'
                     />
-                    <div className="flex-1 flex-col">
-                        <p className="text-sm font-semibold line-clamp-1">
-                            {user?.fullName}
-                        </p>
-                    </div>
-                <SquarePen size={34} className={'ml-auto text-gray-500'} />
                 </div>
             )}
         </div>

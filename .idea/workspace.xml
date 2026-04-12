@@ -5,13 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b176e951-e063-44ef-9015-4c627183ed67" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.prettierrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/DarkMode/ThemeProvider.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Editor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Editor.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/newDocumentButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/newDocumentButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/sidebar/Recents.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/sidebar/Recents.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/sidebar/Sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/sidebar/Sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/sidebar/SidebarHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/sidebar/SidebarHeader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/firebase.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/firebase.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +87,7 @@
     "rearrange.code.on.save": "true",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "/home/dev/WebstormProjects/notion-clone/node_modules/typescript/lib",
+    "ts.external.directory.path": "/home/dev/WebstormProjects/Notionly/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>

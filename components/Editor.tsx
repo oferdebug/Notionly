@@ -1,12 +1,12 @@
 'use client';
-import {useEditor,EditorContent} from "@tiptap/react";
+import {EditorContent, useEditor} from "@tiptap/react";
 import {StarterKit} from "@tiptap/starter-kit";
 import {doc, updateDoc} from "firebase/firestore";
 import {db} from "@/lib/firebase";
 import {Input} from "@/components/ui/input";
 import {useState} from 'react';
 
-    interface EditorProps {
+interface EditorProps {
         id:string;
         initialContent?:string;
         initialTitle?:string;
@@ -17,7 +17,7 @@ import {useState} from 'react';
         extensions:[StarterKit],
         immediatelyRender: false,
         editable:true,
-        autoFocus:true,
+        autofocus:true,
         content:initialContent,
         onUpdate:async ({editor})=>{
             const docRef = doc(db, "documents", id);
