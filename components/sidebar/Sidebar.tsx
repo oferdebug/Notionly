@@ -14,7 +14,7 @@ function Sidebar() {
         <div className={'p-2 md:flex md:flex-col md:items-center md:p-6 md:bg-card md:h-screen md:relative'}>
             <Sheet>
                 <div className={'md:hidden'}>
-                    <SheetTrigger>
+                    <SheetTrigger aria-label="Open sidebar menu">
                         <MenuIcon className={'p-2 hover:opacity-30 rounded-lg'} size={34} />
                     </SheetTrigger>
                 </div>
@@ -34,6 +34,7 @@ function Sidebar() {
 
 
             <div className={'hidden md:flex md:flex-col'}>
+            <SidebarHeader />
             <NewDocumentButton />
             <SidebarNav />
             <Recents />
