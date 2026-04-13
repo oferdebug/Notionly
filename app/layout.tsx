@@ -5,14 +5,15 @@ import { ClerkProvider } from '@clerk/nextjs';
 import Header from '@/components/Header';
 import Sidebar from '@/components/sidebar/Sidebar';
 import ThemeProvider from '@/components/DarkMode/ThemeProvider';
+import Toolbar from '@/components/Editor/Toolbar';
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+const geist = Geist({ subsets: ['Latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-    title: 'Notionly',
-    description: 'A collaborative document editing platform.',
-    title: "Collaborative Document Editor",
-    description: "A real-time collaborative document editing application",
+    title: 'Notionally',
+    description: "A Real Time Collaborative Document Editor",
 };
 
 export default function RootLayout({

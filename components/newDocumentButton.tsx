@@ -51,15 +51,6 @@ function NewDocumentButton() {
             >
                 New Document
             </Button>
-            <button
-                type="button"
-                className={'md:hidden'}
-                onClick={handleCreateDocument}
-                aria-label="New Document"
-            >
-                <FilePlusCorner />
-            </button>
-            <Button onClick={handleCreateDocument} className={'hidden md:flex'}>New Document</Button>
         </>
     );
 }

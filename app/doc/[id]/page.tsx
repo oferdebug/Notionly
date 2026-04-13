@@ -1,6 +1,6 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import Editor from '@/components/Editor';
+import Editor from '@/components/Editor/Editor';
 
 async function Page({ params }: { params: Promise<{ id: string }> }) {
     const {id} = await params;
