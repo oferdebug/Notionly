@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -124,6 +125,10 @@
     height: 0;
 }
 
+.tiptap:focus {
+    outline: none;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -133,5 +138,8 @@
     }
   html {
     @apply font-sans;
+    }
+  .prose {
+    @apply prose-invert;
     }
 }

@@ -36,7 +36,7 @@ interface EditorProps {
             },
         });
     return (
-        <div className={'min-h-screen p-4 border border-gray-500'}>
+        <div className={'min-h-screen p-4 border border-border'}>
             <input
                 value={title}
                 onChange={async (e) => {
@@ -48,7 +48,11 @@ interface EditorProps {
                 className="w-full text-4xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground"
             />
             <Toolbar editor={editor} />
-            {editor && <EditorContent editor={editor} />}
+            {editor && (
+                <div className="prose prose-invert max-w-none mt-4 tiptap">
+                    <EditorContent editor={editor} />
+                </div>
+            )}
         </div>
     );
 
