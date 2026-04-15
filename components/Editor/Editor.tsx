@@ -7,17 +7,27 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Toolbar from '@/components/Editor/Toolbar';
 import Placeholder from '@tiptap/extension-placeholder';
-import { Trash2 } from 'lucide-react';
+import { Smile, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
+import EmojiPicker from 'emoji-picker-react';
+
 interface EditorProps {
     id: string;
     initialContent?: string;
     initialTitle?: string;
+    initialEmoji?: string;
 }
 
-function Editor({ id, initialContent, initialTitle }: EditorProps) {
+function Editor({
+    id,
+    initialContent,
+    initialTitle,
+    initialEmoji,
+}: EditorProps) {
     const [title, setTitle] = useState(initialTitle || '');
+    const [emoji, setEmoji] = useState(initialEmoji || '');
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const router = useRouter();
 
     const handleDelete = async () => {
@@ -27,6 +37,13 @@ function Editor({ id, initialContent, initialTitle }: EditorProps) {
         if (!confirmed) return;
         await deleteDoc(doc(db, 'documents', id));
         router.push('/');
+    };
+
+    const handleEmojiSelect = async (emojiData: { emoji: string }) => {
+        setEmoji(emojiData.emoji);
+        setShowEmojiPicker(false);
+        const docRef = doc(db, 'documents', id);
+        await updateDoc(docRef, { emoji: emojiData.emoji });
     };
 
     const editor = useEditor({
@@ -50,8 +67,31 @@ function Editor({ id, initialContent, initialTitle }: EditorProps) {
 
     return (
         <>
-            <Breadcrumbs title={title} />
+            <Breadcrumbs title={title} emoji={emoji} />
             <div className={'min-h-screen p-4 border border-border'}>
+                <div className="relative mb-2">
+                    <button
+                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                        className="text-4xl hover:opacity-70"
+                    >
+                        {emoji || (
+                            <Smile
+                                size={36}
+                                className="text-muted-foreground"
+                            />
+                        )}
+                    </button>
+                    {showEmojiPicker && (
+                        <div className="absolute top-12 left-0 z-50">
+                            <EmojiPicker
+                                onEmojiClick={handleEmojiSelect}
+                                theme="dark"
+                                as
+                                any
+                            />
+                        </div>
+                    )}
+                </div>
                 <div className="flex items-center justify-between">
                     <input
                         value={title}

@@ -13,14 +13,17 @@ import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { FileText, Trash2 } from 'lucide-react';
 
+
+interface Document {
+    id: string;
+    title: string;
+    userId: string;
+    createdAt: { seconds: number };
+    emoji?: string;
+}
+
 function Recents() {
     const { user } = useUser();
-    interface Document {
-        id: string;
-        title: string;
-        userId: string;
-        createdAt: { seconds: number };
-    }
 
     const [recents, setRecents] = useState<Document[]>([]);
     useEffect(() => {
@@ -72,10 +75,14 @@ function Recents() {
                         className="flex items-center justify-between group p-2 rounded hover:bg-muted"
                     >
                         <div className="flex items-center gap-2 min-w-0">
-                            <FileText
-                                size={16}
-                                className="text-muted-foreground shrink-0"
-                            />
+                            <div className="shrink-0 w-4 text-center">
+                                {recent.emoji || (
+                                    <FileText
+                                        size={16}
+                                        className="text-muted-foreground"
+                                    />
+                                )}
+                            </div>
                             <div className="min-w-0">
                                 <span className="block truncate text-sm">
                                     {recent.title}
