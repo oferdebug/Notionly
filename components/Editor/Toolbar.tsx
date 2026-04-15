@@ -102,19 +102,6 @@ function Toolbar({ editor }: { editor: Editor |null }) {
                     <Code className={'h-6 w-6'} />
                 </button>
                 <div className="w-px h-6 bg-border mx-1" />
-                <button
-                    onClick={() => editor.chain().focus().undo().run()}
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('undo') ? 'bg-muted' : ''}`}
-                >
-                    <Undo className={'w-6 h-6'} />
-                </button>
-
-                <button
-                    onClick={() => editor.chain().focus().redo().run()}
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.can().redo() ? 'bg-muted' : ''}`}
-                >
-                    <Redo className={'w-6 h-6'} />
-                </button>
             </div>
         </div>
     );

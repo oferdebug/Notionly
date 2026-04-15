@@ -1,7 +1,7 @@
 'use client';
 import { EditorContent, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
-import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import {  doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -59,11 +59,11 @@ function Editor({
     }, [room]);
 
     const handleDelete = async () => {
-        const confirmed = window.confirm(
-            'Are you sure you want to delete this document?',
-        );
+        const confirmed = window.confirm('Move this document to trash?');
         if (!confirmed) return;
-        await deleteDoc(doc(db, 'documents', id));
+        await updateDoc(doc(db, 'documents', id), {
+            trashedAt: new Date(),
+        });
         router.push('/');
     };
 

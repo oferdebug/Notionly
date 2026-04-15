@@ -1,6 +1,14 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Bot, Home, Inbox, Library, Presentation, Search } from 'lucide-react';
+import {
+    Bot,
+    Home,
+    Inbox,
+    Library,
+    Presentation,
+    Search,
+    Trash2,
+} from 'lucide-react';
 import Link from 'next/link';
 import SearchDialog from '@/components/SearchDialog';
 
@@ -32,6 +40,11 @@ function SidebarNav() {
             label: 'Library',
             href: '/library',
             icon: Library,
+        },
+        {
+            label: 'Trash',
+            href: '/trash',
+            icon: Trash2,
         },
     ];
 

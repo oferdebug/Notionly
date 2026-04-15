@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import {
     collection,
-    deleteDoc,
     doc,
     onSnapshot,
     query,
+    updateDoc,
     where,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -13,13 +13,13 @@ import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { FileText, Trash2 } from 'lucide-react';
 
-
 interface Document {
     id: string;
     title: string;
     userId: string;
     createdAt: { seconds: number };
     emoji?: string;
+    trashedAt?: { seconds: number } | null;
 }
 
 function Recents() {
@@ -37,24 +37,23 @@ function Recents() {
         );
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            return setRecents(
-                snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                })) as Document[],
-            );
+            const docs = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            })) as Document[];
+            setRecents(docs.filter((d) => !d.trashedAt));
         });
         return () => unsubscribe();
     }, [user?.id]);
 
-    const handleDelete = async (e: React.MouseEvent, id: string) => {
+    const handleTrash = async (e: React.MouseEvent, id: string) => {
         e.preventDefault();
         e.stopPropagation();
-        const confirmed = window.confirm(
-            'Are you sure you want to delete this document?',
-        );
+        const confirmed = window.confirm('Move this document to trash?');
         if (!confirmed) return;
-        await deleteDoc(doc(db, 'documents', id));
+        await updateDoc(doc(db, 'documents', id), {
+            trashedAt: new Date(),
+        });
     };
 
     const formatDate = (timestamp: { seconds: number }) => {
@@ -93,7 +92,7 @@ function Recents() {
                             </div>
                         </div>
                         <button
-                            onClick={(e) => handleDelete(e, recent.id)}
+                            onClick={(e) => handleTrash(e, recent.id)}
                             className="opacity-0 group-hover:opacity-100 p-1 hover:text-destructive shrink-0"
                         >
                             <Trash2 size={16} />
