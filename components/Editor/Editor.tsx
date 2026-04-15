@@ -3,19 +3,23 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Toolbar from '@/components/Editor/Toolbar';
 import Placeholder from '@tiptap/extension-placeholder';
+import Collaboration from '@tiptap/extension-collaboration';
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { Smile, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
-import EmojiPicker from 'emoji-picker-react';
+import EmojiPicker, { Theme } from 'emoji-picker-react';
 import CoverImage from '@/components/CoverImage/CoverImage';
+import * as Y from 'yjs';
+import { LiveblocksYjsProvider } from '@liveblocks/yjs';
+import { useRoom, useSelf } from '@liveblocks/react';
 
 interface EditorProps {
     id: string;
-    initialContent?: string;
     initialTitle?: string;
     initialEmoji?: string;
     initialCover?: string;
@@ -23,7 +27,6 @@ interface EditorProps {
 
 function Editor({
     id,
-    initialContent,
     initialTitle,
     initialEmoji,
     initialCover,
@@ -31,7 +34,29 @@ function Editor({
     const [title, setTitle] = useState(initialTitle || '');
     const [emoji, setEmoji] = useState(initialEmoji || '');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [yDoc, setYDoc] = useState<Y.Doc | null>(null);
+    const [provider, setProvider] = useState<LiveblocksYjsProvider | null>(
+        null,
+    );
     const router = useRouter();
+    const room = useRoom();
+    const userInfo = useSelf((me) => me.info);
+    const [randomColor] = useState(
+        () => '#' + Math.floor(Math.random() * 16777215).toString(16),
+    );
+
+    useEffect(() => {
+        const yDocument = new Y.Doc();
+        const yjsProvider = new LiveblocksYjsProvider(room, yDocument);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setYDoc(yDocument);
+        setProvider(yjsProvider);
+
+        return () => {
+            yDocument.destroy();
+            yjsProvider.destroy();
+        };
+    }, [room]);
 
     const handleDelete = async () => {
         const confirmed = window.confirm(
@@ -51,22 +76,35 @@ function Editor({
 
     const editor = useEditor({
         extensions: [
-            StarterKit,
+            StarterKit.configure({
+                undoRedo: false,
+            }),
             Placeholder.configure({
                 placeholder: 'Start writing...',
             }),
+            ...(yDoc && provider
+                ? [
+                      Collaboration.configure({
+                          document: yDoc,
+                      }),
+                      CollaborationCursor.configure({
+                          provider,
+                          user: {
+                              name: userInfo?.name || 'Anonymous',
+                              color: randomColor,
+                          },
+                      }),
+                  ]
+                : []),
         ],
         immediatelyRender: false,
         editable: true,
         autofocus: true,
-        content: initialContent,
-        onUpdate: async ({ editor }) => {
-            const docRef = doc(db, 'documents', id);
-            await updateDoc(docRef, {
-                content: editor.getHTML(),
-            });
-        },
     });
+
+    if (!yDoc || !provider) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <>
@@ -90,7 +128,7 @@ function Editor({
                         <div className="absolute top-12 left-0 z-50">
                             <EmojiPicker
                                 onEmojiClick={handleEmojiSelect}
-                                theme={'dark' as any}
+                                theme={Theme.DARK}
                             />
                         </div>
                     )}
