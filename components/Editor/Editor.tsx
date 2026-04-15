@@ -11,12 +11,14 @@ import { Smile, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import EmojiPicker from 'emoji-picker-react';
+import CoverImage from '@/components/CoverImage/CoverImage';
 
 interface EditorProps {
     id: string;
     initialContent?: string;
     initialTitle?: string;
     initialEmoji?: string;
+    initialCover?: string;
 }
 
 function Editor({
@@ -24,6 +26,7 @@ function Editor({
     initialContent,
     initialTitle,
     initialEmoji,
+    initialCover,
 }: EditorProps) {
     const [title, setTitle] = useState(initialTitle || '');
     const [emoji, setEmoji] = useState(initialEmoji || '');
@@ -68,11 +71,13 @@ function Editor({
     return (
         <>
             <Breadcrumbs title={title} emoji={emoji} />
-            <div className={'min-h-screen p-4 border border-border'}>
+            <CoverImage id={id} initialCover={initialCover} />
+            <div className="min-h-screen p-4 border border-border">
                 <div className="relative mb-2">
                     <button
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                         className="text-4xl hover:opacity-70"
+                        aria-label="Select emoji"
                     >
                         {emoji || (
                             <Smile
@@ -85,9 +90,7 @@ function Editor({
                         <div className="absolute top-12 left-0 z-50">
                             <EmojiPicker
                                 onEmojiClick={handleEmojiSelect}
-                                theme="dark"
-                                as
-                                any
+                                theme={'dark' as any}
                             />
                         </div>
                     )}
@@ -108,6 +111,7 @@ function Editor({
                         variant="ghost"
                         size="icon"
                         className="hover:text-destructive"
+                        aria-label="Delete document"
                     >
                         <Trash2 size={20} />
                     </Button>
