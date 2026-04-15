@@ -9,7 +9,7 @@ import Toolbar from '@/components/Editor/Toolbar';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 interface EditorProps {
     id: string;
     initialContent?: string;
@@ -49,34 +49,37 @@ function Editor({ id, initialContent, initialTitle }: EditorProps) {
     });
 
     return (
-        <div className={'min-h-screen p-4 border border-border'}>
-            <div className="flex items-center justify-between">
-                <input
-                    value={title}
-                    onChange={async (e) => {
-                        setTitle(e.target.value);
-                        const docRef = doc(db, 'documents', id);
-                        await updateDoc(docRef, { title: e.target.value });
-                    }}
-                    placeholder="Untitled"
-                    className="w-full text-4xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground"
-                />
-                <Button
-                    onClick={handleDelete}
-                    variant="ghost"
-                    size="icon"
-                    className="hover:text-destructive"
-                >
-                    <Trash2 size={20} />
-                </Button>
-            </div>
-            <Toolbar editor={editor} />
-            {editor && (
-                <div className="prose prose-invert max-w-none mt-4 tiptap">
-                    <EditorContent editor={editor} />
+        <>
+            <Breadcrumbs title={title} />
+            <div className={'min-h-screen p-4 border border-border'}>
+                <div className="flex items-center justify-between">
+                    <input
+                        value={title}
+                        onChange={async (e) => {
+                            setTitle(e.target.value);
+                            const docRef = doc(db, 'documents', id);
+                            await updateDoc(docRef, { title: e.target.value });
+                        }}
+                        placeholder="Untitled"
+                        className="w-full text-4xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground"
+                    />
+                    <Button
+                        onClick={handleDelete}
+                        variant="ghost"
+                        size="icon"
+                        className="hover:text-destructive"
+                    >
+                        <Trash2 size={20} />
+                    </Button>
                 </div>
-            )}
-        </div>
+                <Toolbar editor={editor} />
+                {editor && (
+                    <div className="prose prose-invert max-w-none mt-4 tiptap">
+                        <EditorContent editor={editor} />
+                    </div>
+                )}
+            </div>
+        </>
     );
 }
 
