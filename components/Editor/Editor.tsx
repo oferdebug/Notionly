@@ -17,6 +17,7 @@ import CoverImage from '@/components/CoverImage/CoverImage';
 import * as Y from 'yjs';
 import { LiveblocksYjsProvider } from '@liveblocks/yjs';
 import { useRoom, useSelf } from '@liveblocks/react';
+import ExportMenu from '@/components/Editor/ExportMenu';
 
 interface EditorProps {
     id: string;
@@ -144,15 +145,18 @@ function Editor({
                         placeholder="Untitled"
                         className="w-full text-4xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground"
                     />
-                    <Button
-                        onClick={handleDelete}
-                        variant="ghost"
-                        size="icon"
-                        className="hover:text-destructive"
-                        aria-label="Delete document"
-                    >
-                        <Trash2 size={20} />
-                    </Button>
+                    <div className={'flex items-center gap-2'}>
+                        <ExportMenu editor={editor} title={title} />
+                        <Button
+                            onClick={handleDelete}
+                            variant="ghost"
+                            size="icon"
+                            className="hover:text-destructive"
+                            aria-label="Delete document"
+                        >
+                            <Trash2 size={20} />
+                        </Button>
+                    </div>
                 </div>
                 <Toolbar editor={editor} />
                 {editor && (
