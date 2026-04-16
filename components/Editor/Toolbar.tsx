@@ -12,96 +12,100 @@ import {
     ListOrdered,
     Quote,
     Code,
-    Undo,
-    Redo,
 } from 'lucide-react';
-function Toolbar({ editor }: { editor: Editor |null }) {
+
+function Toolbar({ editor }: { editor: Editor | null }) {
     if (!editor) return null;
     return (
-        <div>
-            <div
-                className={
-                    'flex items-center gap-1 border-b border-border p-2 flex-wrap'
-                }
-            >
+        <div className="overflow-x-auto border-b border-border">
+            <div className="flex items-center gap-0.5 p-2 w-max">
                 <button
                     onClick={() => editor.chain().focus().toggleBold().run()}
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('bold') ? 'bg-muted' : ''}`}
+                    className={`p-1.5 rounded hover:bg-muted/50 shrink-0 ${editor.isActive('bold') ? 'bg-muted' : ''}`}
+                    aria-label="Bold"
                 >
-                    <Bold className={'w-6 h-6'} />
+                    <Bold className="w-5 h-5" />
                 </button>
                 <button
                     onClick={() => editor.chain().focus().toggleItalic().run()}
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('italic') ? 'bg-muted' : ''}`}
+                    className={`p-1.5 rounded hover:bg-muted/50 shrink-0 ${editor.isActive('italic') ? 'bg-muted' : ''}`}
+                    aria-label="Italic"
                 >
-                    <Italic className={'w-6 h-6'} />
+                    <Italic className="w-5 h-5" />
                 </button>
                 <button
                     onClick={() => editor.chain().focus().toggleStrike().run()}
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('strike') ? 'bg-muted' : ''}`}
+                    className={`p-1.5 rounded hover:bg-muted/50 shrink-0 ${editor.isActive('strike') ? 'bg-muted' : ''}`}
+                    aria-label="Strikethrough"
                 >
-                    <Strikethrough className={'w-6 h-6'} />
+                    <Strikethrough className="w-5 h-5" />
                 </button>
-                <div className="w-px h-6 bg-border mx-1" />
+                <div className="w-px h-5 bg-border mx-1 shrink-0" />
                 <button
                     onClick={() =>
                         editor.chain().focus().toggleHeading({ level: 1 }).run()
                     }
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('heading', { level: 1 }) ? 'bg-muted' : ''}`}
+                    className={`p-1.5 rounded hover:bg-muted/50 shrink-0 ${editor.isActive('heading', { level: 1 }) ? 'bg-muted' : ''}`}
+                    aria-label="Heading 1"
                 >
-                    <Heading1 className={'w-6 h-6'} />
+                    <Heading1 className="w-5 h-5" />
                 </button>
                 <button
                     onClick={() =>
                         editor.chain().focus().toggleHeading({ level: 2 }).run()
                     }
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('heading', { level: 2 }) ? 'bg-muted' : ''}`}
+                    className={`p-1.5 rounded hover:bg-muted/50 shrink-0 ${editor.isActive('heading', { level: 2 }) ? 'bg-muted' : ''}`}
+                    aria-label="Heading 2"
                 >
-                    <Heading2 className={'w-6 h-6'} />
+                    <Heading2 className="w-5 h-5" />
                 </button>
                 <button
                     onClick={() =>
                         editor.chain().focus().toggleHeading({ level: 3 }).run()
                     }
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('heading', { level: 3 }) ? 'bg-muted' : ''}`}
+                    className={`p-1.5 rounded hover:bg-muted/50 shrink-0 ${editor.isActive('heading', { level: 3 }) ? 'bg-muted' : ''}`}
+                    aria-label="Heading 3"
                 >
-                    <Heading3 className={'w-6 h-6'} />
+                    <Heading3 className="w-5 h-5" />
                 </button>
-                <div className="w-px h-6 bg-border mx-1" />
+                <div className="w-px h-5 bg-border mx-1 shrink-0" />
                 <button
                     onClick={() =>
                         editor.chain().focus().toggleBulletList().run()
                     }
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('bulletList') ? 'bg-muted' : ''}`}
+                    className={`p-1.5 rounded hover:bg-muted/50 shrink-0 ${editor.isActive('bulletList') ? 'bg-muted' : ''}`}
+                    aria-label="Bullet list"
                 >
-                    <List className={'w-6 h-6'} />
+                    <List className="w-5 h-5" />
                 </button>
                 <button
                     onClick={() =>
                         editor.chain().focus().toggleOrderedList().run()
                     }
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('orderedList') ? 'bg-muted' : ''}`}
+                    className={`p-1.5 rounded hover:bg-muted/50 shrink-0 ${editor.isActive('orderedList') ? 'bg-muted' : ''}`}
+                    aria-label="Ordered list"
                 >
-                    <ListOrdered className={'w-6 h-6'} />
+                    <ListOrdered className="w-5 h-5" />
                 </button>
-                <div className="w-px h-6 bg-border mx-1" />
+                <div className="w-px h-5 bg-border mx-1 shrink-0" />
                 <button
                     onClick={() =>
                         editor.chain().focus().toggleBlockquote().run()
                     }
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('blockquote') ? 'bg-muted' : ''}`}
+                    className={`p-1.5 rounded hover:bg-muted/50 shrink-0 ${editor.isActive('blockquote') ? 'bg-muted' : ''}`}
+                    aria-label="Blockquote"
                 >
-                    <Quote className={'h-6 w-6'} />
+                    <Quote className="w-5 h-5" />
                 </button>
                 <button
                     onClick={() =>
                         editor.chain().focus().toggleCodeBlock().run()
                     }
-                    className={`p-1 rounded hover:bg-muted/50 ${editor.isActive('codeBlock') ? 'bg-muted' : ''}`}
+                    className={`p-1.5 rounded hover:bg-muted/50 shrink-0 ${editor.isActive('codeBlock') ? 'bg-muted' : ''}`}
+                    aria-label="Code block"
                 >
-                    <Code className={'h-6 w-6'} />
+                    <Code className="w-5 h-5" />
                 </button>
-                <div className="w-px h-6 bg-border mx-1" />
             </div>
         </div>
     );

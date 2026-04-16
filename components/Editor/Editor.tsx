@@ -1,7 +1,7 @@
 'use client';
 import { EditorContent, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
-import {  doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -26,12 +26,7 @@ interface EditorProps {
     initialCover?: string;
 }
 
-function Editor({
-    id,
-    initialTitle,
-    initialEmoji,
-    initialCover,
-}: EditorProps) {
+function Editor({ id, initialTitle, initialEmoji, initialCover }: EditorProps) {
     const [title, setTitle] = useState(initialTitle || '');
     const [emoji, setEmoji] = useState(initialEmoji || '');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -49,7 +44,6 @@ function Editor({
     useEffect(() => {
         const yDocument = new Y.Doc();
         const yjsProvider = new LiveblocksYjsProvider(room, yDocument);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setYDoc(yDocument);
         setProvider(yjsProvider);
 
@@ -111,11 +105,11 @@ function Editor({
         <>
             <Breadcrumbs title={title} emoji={emoji} />
             <CoverImage id={id} initialCover={initialCover} />
-            <div className="min-h-screen p-4 border border-border">
-                <div className="relative mb-2">
+            <div className="min-h-screen p-3 md:p-4 border border-border">
+                <div className="flex items-center gap-2 mb-2 relative">
                     <button
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                        className="text-4xl hover:opacity-70"
+                        className="text-4xl hover:opacity-70 shrink-0"
                         aria-label="Select emoji"
                     >
                         {emoji || (
@@ -125,16 +119,6 @@ function Editor({
                             />
                         )}
                     </button>
-                    {showEmojiPicker && (
-                        <div className="absolute top-12 left-0 z-50">
-                            <EmojiPicker
-                                onEmojiClick={handleEmojiSelect}
-                                theme={Theme.DARK}
-                            />
-                        </div>
-                    )}
-                </div>
-                <div className="flex items-center justify-between">
                     <input
                         value={title}
                         onChange={async (e) => {
@@ -143,9 +127,9 @@ function Editor({
                             await updateDoc(docRef, { title: e.target.value });
                         }}
                         placeholder="Untitled"
-                        className="w-full text-4xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground"
+                        className="flex-1 min-w-0 text-2xl md:text-4xl font-bold bg-transparent border-none outline-none placeholder:text-muted-foreground"
                     />
-                    <div className={'flex items-center gap-2'}>
+                    <div className="flex items-center gap-1 shrink-0">
                         <ExportMenu editor={editor} title={title} />
                         <Button
                             onClick={handleDelete}
@@ -157,6 +141,14 @@ function Editor({
                             <Trash2 size={20} />
                         </Button>
                     </div>
+                    {showEmojiPicker && (
+                        <div className="absolute top-14 left-0 z-50">
+                            <EmojiPicker
+                                onEmojiClick={handleEmojiSelect}
+                                theme={Theme.DARK}
+                            />
+                        </div>
+                    )}
                 </div>
                 <Toolbar editor={editor} />
                 {editor && (
