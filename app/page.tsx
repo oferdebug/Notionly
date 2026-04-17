@@ -1,21 +1,19 @@
-"use client";
-import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+'use client';
+import { useUser } from '@clerk/nextjs';
 import {
 	collection,
-	deleteDoc,
 	doc,
 	onSnapshot,
 	query,
 	updateDoc,
 	where,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import Link from "next/link";
-import { FileText, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import NewDocumentButton from "@/components/newDocumentButton";
-import { toast } from "sonner";
+} from 'firebase/firestore';
+import { FileText, Star } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import NewDocumentButton from '@/components/newDocumentButton';
+import { db } from '@/lib/firebase';
 
 interface Document {
 	id: string;
@@ -24,7 +22,9 @@ interface Document {
 	createdAt: { seconds: number };
 	sharedWith?: string[];
 	trashedAt?: { seconds: number } | null;
+	favorite?: boolean;
 }
+
 export default function Home() {
 	const { user } = useUser();
 	const [myDocs, setMyDocs] = useState<Document[]>([]);
@@ -34,8 +34,8 @@ export default function Home() {
 		if (!user?.id) return;
 
 		const myQuery = query(
-			collection(db, "documents"),
-			where("userId", "==", user.id),
+			collection(db, 'documents'),
+			where('userId', '==', user.id),
 		);
 
 		const unsubMy = onSnapshot(myQuery, (snapshot) => {
@@ -50,8 +50,8 @@ export default function Home() {
 		let unsubShared = () => {};
 		if (email) {
 			const sharedQuery = query(
-				collection(db, "documents"),
-				where("sharedWith", "array-contains", email),
+				collection(db, 'documents'),
+				where('sharedWith', 'array-contains', email),
 			);
 			unsubShared = onSnapshot(sharedQuery, (snapshot) => {
 				const docs = snapshot.docs.map((doc) => ({
@@ -69,50 +69,33 @@ export default function Home() {
 	}, [user?.id, user?.primaryEmailAddress?.emailAddress]);
 
 	const formatDate = (timestamp: { seconds: number }) => {
-		if (!timestamp) return "";
+		if (!timestamp) return '';
 		return new Date(timestamp.seconds * 1000).toLocaleDateString();
 	};
 
-	const handleTrash = (e: React.MouseEvent, id: string) => {
+	const handleToggleFavorite = async (
+		e: React.MouseEvent,
+		id: string,
+		currentFav: boolean,
+	) => {
 		e.preventDefault();
 		e.stopPropagation();
-		const confirmed = window.confirm("Move this document to trash?");
-		if (!confirmed) return;
-		updateDoc(doc(db, "documents", id), {
-			trashedAt: new Date(),
+		await updateDoc(doc(db, 'documents', id), {
+			favorite: !currentFav,
 		});
-		toast.success("Document moved to trash");
-		setMyDocs(myDocs.filter((d) => d.id !== id));
-		setShareDocs(shareDocs.filter((d) => d.id !== id));
+		toast.success(currentFav ? 'Removed from favorites' : 'Added to favorites');
 	};
 
-	const handleRestore = (id: string) => {
-		updateDoc(doc(db, "documents", id), {
-			trashedAt: null,
-		});
-		toast.success("Document restored");
-		setMyDocs(myDocs.filter((d) => d.id !== id));
-		setShareDocs(shareDocs.filter((d) => d.id !== id));
-	};
+	const favorites = myDocs.filter((d) => d.favorite);
+	const nonFavorites = myDocs.filter((d) => !d.favorite);
 
-	const handleDeleteForever = (id: string) => {
-		deleteDoc(doc(db, "documents", id));
-		toast.success("Document deleted forever");
-		setMyDocs(myDocs.filter((d) => d.id !== id));
-		setShareDocs(shareDocs.filter((d) => d.id !== id));
-	};
-
-	const allDocs = myDocs.concat(shareDocs);
-	const sortedDocs = allDocs.sort(
-		(a, b) => b.createdAt.seconds - a.createdAt.seconds,
-	);
 	return (
 		<div className="max-w-4xl mx-auto p-6">
 			<div className="mb-8">
 				<h1 className="text-3xl font-bold mb-3">
 					{user?.firstName
-						? `Welcome back,${user.firstName}`
-						: `Welcome To The Space`}
+						? `Welcome back, ${user.firstName}`
+						: 'Welcome To The Space'}
 				</h1>
 				<p className="text-muted-foreground">Pick Up Where You Left Off</p>
 			</div>
@@ -120,33 +103,82 @@ export default function Home() {
 				<NewDocumentButton />
 			</div>
 
-			<section className="mb-8">
-				<h3 className="text-lg font-semibold mb-6">My Documents</h3>
-				{myDocs.length === 0 ? (
-					<p className="text-muted-foreground text-sm">
-						No documents yet. Create your first document to get started.
-					</p>
-				) : (
-					<div className="grid grid-cols-1 sm:grdic-cols-2 lg:grid-cols-3 gap-4">
-						{myDocs.map((doc) => (
+			{favorites.length > 0 && (
+				<section className="mb-8">
+					<h3 className="text-lg font-semibold mb-4">Favorites</h3>
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+						{favorites.map((d) => (
 							<Link
-								key={doc.id}
-								href={`/doc/${doc.id}`}
-								className="flex items-start gap-3 p-6 rounded-lg border hover:bg-muted"
+								key={d.id}
+								href={`/doc/${d.id}`}
+								className="flex items-start gap-3 p-4 rounded-lg border border-border hover:bg-muted group relative"
 							>
 								<div className="text-2xl shrink-0">
-									{doc.emooji || (
+									{d.emooji || (
 										<FileText size={24} className="text-muted-foreground" />
 									)}
 								</div>
 								<div className="min-w-0">
 									<p className="text-sm font-medium truncate">
-										{doc.title || "Untitled"}
+										{d.title || 'Untitled'}
 									</p>
 									<p className="text-xs text-muted-foreground">
-										{formatDate(doc.createdAt)}
+										{formatDate(d.createdAt)}
 									</p>
 								</div>
+								<button
+									type="button"
+									onClick={(e) => handleToggleFavorite(e, d.id, true)}
+									className="absolute top-2 right-2 text-yellow-500"
+									aria-label="Remove from favorites"
+								>
+									<Star size={16} fill="currentColor" />
+								</button>
+							</Link>
+						))}
+					</div>
+				</section>
+			)}
+
+			<section className="mb-8">
+				<h3 className="text-lg font-semibold mb-4">My Documents</h3>
+				{nonFavorites.length === 0 && favorites.length === 0 ? (
+					<p className="text-muted-foreground text-sm">
+						No documents yet. Create your first document to get started.
+					</p>
+				) : nonFavorites.length === 0 ? (
+					<p className="text-muted-foreground text-sm">
+						All documents are in favorites.
+					</p>
+				) : (
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+						{nonFavorites.map((d) => (
+							<Link
+								key={d.id}
+								href={`/doc/${d.id}`}
+								className="flex items-start gap-3 p-4 rounded-lg border border-border hover:bg-muted group relative"
+							>
+								<div className="text-2xl shrink-0">
+									{d.emooji || (
+										<FileText size={24} className="text-muted-foreground" />
+									)}
+								</div>
+								<div className="min-w-0">
+									<p className="text-sm font-medium truncate">
+										{d.title || 'Untitled'}
+									</p>
+									<p className="text-xs text-muted-foreground">
+										{formatDate(d.createdAt)}
+									</p>
+								</div>
+								<button
+									type="button"
+									onClick={(e) => handleToggleFavorite(e, d.id, false)}
+									className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-yellow-500"
+									aria-label="Add to favorites"
+								>
+									<Star size={16} />
+								</button>
 							</Link>
 						))}
 					</div>
@@ -157,23 +189,23 @@ export default function Home() {
 				<section>
 					<h3 className="text-lg font-semibold mb-4">Shared with me</h3>
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-						{shareDocs.map((doc) => (
+						{shareDocs.map((d) => (
 							<Link
-								key={doc.id}
-								href={`/doc/${doc.id}`}
+								key={d.id}
+								href={`/doc/${d.id}`}
 								className="flex items-start gap-3 p-4 rounded-lg border border-border hover:bg-muted"
 							>
 								<div className="text-2xl shrink-0">
-									{doc.emooji || (
+									{d.emooji || (
 										<FileText size={24} className="text-muted-foreground" />
 									)}
 								</div>
 								<div className="min-w-0">
 									<p className="font-medium truncate">
-										{doc.title || "Untitled"}
+										{d.title || 'Untitled'}
 									</p>
 									<p className="text-xs text-muted-foreground">
-										{formatDate(doc.createdAt)}
+										{formatDate(d.createdAt)}
 									</p>
 								</div>
 							</Link>
