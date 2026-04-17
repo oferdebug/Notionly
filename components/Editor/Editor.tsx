@@ -18,15 +18,23 @@ import * as Y from 'yjs';
 import { LiveblocksYjsProvider } from '@liveblocks/yjs';
 import { useRoom, useSelf } from '@liveblocks/react';
 import ExportMenu from '@/components/Editor/ExportMenu';
+import ShareDialog from '@/components/Editor/ShareDialog';
 
 interface EditorProps {
     id: string;
     initialTitle?: string;
     initialEmoji?: string;
     initialCover?: string;
+    initialSharedWith?: string[];
 }
 
-function Editor({ id, initialTitle, initialEmoji, initialCover }: EditorProps) {
+function Editor({
+    id,
+    initialTitle,
+    initialEmoji,
+    initialCover,
+    initialSharedWith = [],
+}: EditorProps) {
     const [title, setTitle] = useState(initialTitle || '');
     const [emoji, setEmoji] = useState(initialEmoji || '');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -131,6 +139,10 @@ function Editor({ id, initialTitle, initialEmoji, initialCover }: EditorProps) {
                     />
                     <div className="flex items-center gap-1 shrink-0">
                         <ExportMenu editor={editor} title={title} />
+                        <ShareDialog
+                            id={id}
+                            initialSharedWith={initialSharedWith}
+                        />
                         <Button
                             onClick={handleDelete}
                             variant="ghost"

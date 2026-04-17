@@ -20,6 +20,11 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
                 initialTitle={data.title}
                 initialEmoji={data.emoji}
                 initialCover={data.cover}
+                initialSharedWith={
+                    Array.isArray(data.sharedWith)
+                        ? (data.sharedWith as string[])
+                        : []
+                }
             />
         </LiveblocksWrapper>
     );
