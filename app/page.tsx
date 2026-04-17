@@ -1,6 +1,7 @@
 'use client';
 import { useUser } from '@clerk/nextjs';
 import {
+	addDoc,
 	collection,
 	doc,
 	onSnapshot,
@@ -14,7 +15,9 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import NewDocumentButton from '@/components/newDocumentButton';
 import { db } from '@/lib/firebase';
-
+import { templates } from '@/lib/templates';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 interface Document {
 	id: string;
 	title: string;
@@ -29,7 +32,7 @@ export default function Home() {
 	const { user } = useUser();
 	const [myDocs, setMyDocs] = useState<Document[]>([]);
 	const [shareDocs, setShareDocs] = useState<Document[]>([]);
-
+	const router = useRouter();
 	useEffect(() => {
 		if (!user?.id) return;
 
@@ -88,6 +91,22 @@ export default function Home() {
 
 	const favorites = myDocs.filter((d) => d.favorite);
 	const nonFavorites = myDocs.filter((d) => !d.favorite);
+	async function handleCreateTemplate(
+		content: string,
+		title: string,
+		emoji: string,
+	): Promise<void> {
+		const collectionRef = collection(db, 'documents');
+		const docRef = await addDoc(collectionRef, {
+			title: title,
+			content: content,
+			emoji: emoji,
+			createdAt: new Date(),
+			userId: user?.id,
+			parentId: null,
+		});
+		router.push(`/doc/${docRef.id}`);
+	}
 
 	return (
 		<div className="max-w-4xl mx-auto p-6">
@@ -103,6 +122,20 @@ export default function Home() {
 				<NewDocumentButton />
 			</div>
 
+			<div className="mb-8">
+				<h3 className="text-lg font-semibold mb-4">Templates</h3>
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+					{templates.map((t) => (
+						<Button
+							onClick={() => handleCreateTemplate(t.content, t.title, t.emoji)}
+							key={t.title}
+						>
+							{t.emoji}
+							{t.title}
+						</Button>
+					))}
+				</div>
+			</div>
 			{favorites.length > 0 && (
 				<section className="mb-8">
 					<h3 className="text-lg font-semibold mb-4">Favorites</h3>
