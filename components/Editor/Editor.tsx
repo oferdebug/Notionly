@@ -20,6 +20,7 @@ import { slashCommandExtension } from '@/components/Editor/SlashCommand';
 import Toolbar from '@/components/Editor/Toolbar';
 import { Button } from '@/components/ui/button';
 import { db } from '@/lib/firebase';
+import AIMenu from './AIMenu';
 
 interface EditorProps {
 	id: string;
@@ -135,6 +136,7 @@ function Editor({
 					/>
 					<div className="flex items-center gap-1 shrink-0">
 						<ExportMenu editor={editor} title={title} />
+						<AIMenu editor={editor} />
 						<ShareDialog id={id} initialSharedWith={initialSharedWith} />
 						<Button
 							onClick={handleDelete}
