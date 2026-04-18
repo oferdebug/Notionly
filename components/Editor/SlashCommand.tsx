@@ -1,13 +1,5 @@
 'use client';
-
-import '@tiptap/extension-blockquote';
-import '@tiptap/extension-code-block';
-import '@tiptap/extension-heading';
-import '@tiptap/extension-horizontal-rule';
-import '@tiptap/extension-list/bullet-list';
-import '@tiptap/extension-list/ordered-list';
-import '@tiptap/extension-paragraph';
-
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import type { Editor, Range } from '@tiptap/core';
 import { Extension, ReactRenderer } from '@tiptap/react';
 import Suggestion, {
@@ -26,9 +18,7 @@ import {
 	Quote,
 	Type,
 } from 'lucide-react';
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import type { Instance } from 'tippy.js';
-import tippy from 'tippy.js';
+import tippy, { type Instance } from 'tippy.js';
 
 type SlashCommandItem = {
 	title: string;
@@ -42,54 +32,57 @@ type CommandListHandle = {
 	onKeyDown: (props: SuggestionKeyDownProps) => boolean;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const cmd =
+	(fn: (e: any) => void) =>
+	({ editor }: { editor: Editor }) =>
+		fn(editor);
+
 const items: SlashCommandItem[] = [
 	{
 		title: 'Text',
 		icon: Type,
-		command: ({ editor }) => editor.chain().focus().setParagraph().run(),
+		command: cmd((e) => e.chain().focus().setParagraph().run()),
 	},
 	{
 		title: 'Heading 1',
 		icon: Heading1,
-		command: ({ editor }) =>
-			editor.chain().focus().toggleHeading({ level: 1 }).run(),
+		command: cmd((e) => e.chain().focus().toggleHeading({ level: 1 }).run()),
 	},
 	{
 		title: 'Heading 2',
 		icon: Heading2,
-		command: ({ editor }) =>
-			editor.chain().focus().toggleHeading({ level: 2 }).run(),
+		command: cmd((e) => e.chain().focus().toggleHeading({ level: 2 }).run()),
 	},
 	{
 		title: 'Heading 3',
 		icon: Heading3,
-		command: ({ editor }) =>
-			editor.chain().focus().toggleHeading({ level: 3 }).run(),
+		command: cmd((e) => e.chain().focus().toggleHeading({ level: 3 }).run()),
 	},
 	{
 		title: 'Bullet List',
 		icon: List,
-		command: ({ editor }) => editor.chain().focus().toggleBulletList().run(),
+		command: cmd((e) => e.chain().focus().toggleBulletList().run()),
 	},
 	{
 		title: 'Ordered List',
 		icon: ListOrdered,
-		command: ({ editor }) => editor.chain().focus().toggleOrderedList().run(),
+		command: cmd((e) => e.chain().focus().toggleOrderedList().run()),
 	},
 	{
 		title: 'Quote',
 		icon: Quote,
-		command: ({ editor }) => editor.chain().focus().toggleBlockquote().run(),
+		command: cmd((e) => e.chain().focus().toggleBlockquote().run()),
 	},
 	{
 		title: 'Code Block',
 		icon: Code,
-		command: ({ editor }) => editor.chain().focus().toggleCodeBlock().run(),
+		command: cmd((e) => e.chain().focus().toggleCodeBlock().run()),
 	},
 	{
 		title: 'Divider',
 		icon: Minus,
-		command: ({ editor }) => editor.chain().focus().setHorizontalRule().run(),
+		command: cmd((e) => e.chain().focus().setHorizontalRule().run()),
 	},
 ];
 
