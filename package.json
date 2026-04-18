@@ -16,6 +16,7 @@
     "@liveblocks/react": "^3.18.2",
     "@liveblocks/yjs": "^3.18.2",
     "@tailwindcss/typography": "^0.5.19",
+    "@tiptap/core": "^3.22.3",
     "@tiptap/extension-collaboration": "^3.22.3",
     "@tiptap/extension-collaboration-cursor": "^2.26.2",
     "@tiptap/extension-placeholder": "^3.22.3",
